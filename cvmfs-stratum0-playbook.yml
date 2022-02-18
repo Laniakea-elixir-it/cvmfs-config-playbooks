@@ -1,0 +1,35 @@
+- name: CVMFS
+  hosts: cvmfsstratum0servers
+  become: true
+  tasks:
+    - name: install client using galaxyproject.cvmfs
+      include_role:
+        name: galaxyproject.cvmfs
+      vars:
+        cvmfs_role: client
+        galaxy_cvmfs_repos_enabled: config-repo
+
+    - name: disable autofs
+      systemd: 
+        name: autofs
+        state: stopped
+
+    - name: create stratum0 using galaxyproject.cvmfs
+      include_role:
+        name: galaxyproject.cvmfs
+      vars:
+        cvmfs_numfiles: 4096
+        cvmfs_server_urls:
+          - domain: cloud.ba.infn.it
+            urls:
+              - "http://cloud-212-189-205-127.cloud.ba.infn.it/cvmfs/@fqrn@"
+        cvmfs_repositories:
+          - repository: tools.elixir-italy-cvmfs
+            stratum0: cloud-212-189-205-127.cloud.ba.infn.it
+            key_dir: /etc/cvmfs/keys/tools.elixir-italy-cvmfs.key
+            server_options:
+              - CVMFS_AUTO_TAG=false
+              - CVMFS_GARBAGE_COLLECTION=true
+              - CVMFS_AUTO_GC=false
+            client_options:
+              - CVMFS_NFILES=4096
