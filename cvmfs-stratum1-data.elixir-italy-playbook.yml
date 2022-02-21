@@ -1,0 +1,34 @@
+# Playbook for data.elixir-italy-cvmfs stratum1 server
+# Note: don't use the galaxyproject.cvmfs role, since it's missing some dependencies for stratum1 debian servers, use a local copy of the role and modify it in the following way:
+# Add libapache2-mod-wsgi and squid to the cvmfs_packages.stratum1 variable in /vars/debian.yml
+- name: CVMFS
+  hosts: cvmfsstratum1servers
+  vars:
+    cvmfs_role: stratum1
+    cvmfs_srv_device: /dev/vdb
+    #galaxy_cvmfs_repos_enabled: true
+    # Override default variables
+    cvmfs_keys:
+      - path: /etc/cvmfs/keys/data.elixir-italy-cvmfs.pub
+        key: |
+          -----BEGIN PUBLIC KEY-----
+          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1T3YZPPyvx2GDMfeE3aQ
+          sEoDZac8ln9kd+3vRNu9qbxp5qbaLDelrT1N2u0gaaS83r2HIAebVdR9+xhSI1sO
+          D6m/ulnFlNg2Z+C2US96J9AJnhwKhgQFDtFAvkZ1QBvcDKs815B/Zto/65F63LMh
+          ayeozswG1HUYAOSwKoNt9I0QAb254D6Hn1cTpq5ysaT3ZCpuuHKUGtv46UUXq7TW
+          PUIks8M0CEWpIeHsL2Yz3FZNYtqimEPwNAsL0x+JrHVwiq9S1aIdSM3bN0t5HFwF
+          wBXFF6d5rp/hP3+dOy7hEHahuW64GOoRlP9DKl9evZ/sxHFp+s+cr/EjqFT4P5RM
+          0QIDAQAB
+          -----END PUBLIC KEY-----
+    cvmfs_repositories:
+      - repository: data.elixir-italy-cvmfs 
+        stratum0: elixir-italy-cvmfs.cloud.ba.infn.it #cloud-90-147-75-251.cloud.ba.infn.it
+        owner: "{{ cvmfs_repo_owner | default('root') }}"
+        key_dir: /etc/cvmfs/keys
+        server_options:
+        - CVMFS_AUTO_GC=false
+    cvmfs_geo_license_key:
+  roles:
+    - role: /home/centos/ansible-cvmfs/
+      become: true
+      become_user: root
