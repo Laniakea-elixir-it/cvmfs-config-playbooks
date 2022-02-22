@@ -23,7 +23,7 @@ ansible >= 2.9.6
 ### cvmfs-stratum1-data.elixir-italy-playbook.yml
 ansible-playbook to configure cvmfs stratum1 server with the data.elixir-italy-cvmfs repository on infrastructure deployed through [terraform](https://github.com/Laniakea-elixir-it/tf-cvmfs-stratum1-refdata-GARR)  
 If wanted, the GEO API license key can be added by modifying the variable `cvmfs_geo_license_key`.
-####dependency
+#### dependency
 ansible >= 2.9.6  
 **ansible role:**  
 - name: galaxyproject.cvmfs  
