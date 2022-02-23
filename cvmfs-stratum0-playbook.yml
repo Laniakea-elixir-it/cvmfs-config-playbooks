@@ -38,3 +38,5 @@
         state: present
   roles:
     - galaxyproject.cvmfs
+
+#before install cvmfs client following instruction at https://cvmfs.readthedocs.io/en/stable/cpt-quickstart.html#debian-ubuntu
